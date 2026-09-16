@@ -71,8 +71,14 @@ public class UserController {
 
         String check = userService.bayProduct(userID, productID, merchantId, puyStock);
 
-        if (check.startsWith("true")) {
-            return ResponseEntity.status(200).body(new ApiResponse("Product purchased successfully."));
+        if (check.equals("true")) {
+            return ResponseEntity.status(200)
+                    .body(new ApiResponse("Product purchased successfully."));
+        }
+
+        if (check.startsWith("Purchase successful! Your family member(s) ")) {
+            return ResponseEntity.status(200)
+                    .body(new ApiResponse(check));
         }
         return switch (check) {
             case "user id not found " -> ResponseEntity.status(400).body(new ApiResponse("User ID not found"));
