@@ -1,5 +1,3 @@
-أكيد. بناءً على اللي سويتيه فعلًا في المشروع، هذا قسم مرتب تقدرين تحطينه مباشرة في الـ**README**. خليته بأسلوب طبيعي، مو كأنه مكتوب بشكل رسمي زيادة عن اللزوم، وفي نفس الوقت يوضح شغلك والـlogic اللي أضفتيه.
-
 ## Additional Features I Added
 
 In addition to the main requirements of the E-Commerce System, I added several extra features to improve the user experience and make the system more interactive.
