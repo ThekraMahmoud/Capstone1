@@ -81,6 +81,9 @@ public class UserController {
             case "Merchant does not have this product" -> ResponseEntity.status(400).body(new ApiResponse("Merchant does not have this product"));
             case "not have enough stock" -> ResponseEntity.status(400).body(new ApiResponse("Not enough stock"));
             case "not enough money" -> ResponseEntity.status(400).body(new ApiResponse("Not have enough money"));
+            case "Admin cannot purchase products" -> ResponseEntity.status(400).body(new ApiResponse("Admin cannot purchase products"));
+            case "purchase amount must be greater than zero" -> ResponseEntity.status(400).body(new ApiResponse("Purchase amount must be greater than zero"));
+
             default -> ResponseEntity.status(400).body(new ApiResponse("Something went wrong"));
         };
     }
@@ -120,10 +123,10 @@ public class UserController {
         return switch (check) {
             case "user one not found" -> ResponseEntity.status(400).body(new ApiResponse("Sender ID not found"));
             case "user Tow not found" -> ResponseEntity.status(400).body(new ApiResponse("Receiver ID not found"));
-            case " cannot send request to yourself" ->
-                    ResponseEntity.status(400).body(new ApiResponse(" cannot send request to yourself @_@"));
-            case "PENDING" ->
-                    ResponseEntity.status(200).body(new ApiResponse("Family request sent successfully"));
+            case "You cannot send a family request to an Admin" -> ResponseEntity.status(400).body(new ApiResponse("You cannot send a family request to an Admin"));
+            case "Admin cannot use Family System" -> ResponseEntity.status(400).body(new ApiResponse("Admin cannot use Family System"));
+            case " cannot send request to yourself" -> ResponseEntity.status(400).body(new ApiResponse(" cannot send request to yourself @_@"));
+            case "PENDING" -> ResponseEntity.status(200).body(new ApiResponse("Family request sent successfully"));
             case "You are already family"->ResponseEntity.status(400).body(new ApiResponse("You are already family"));
             default -> ResponseEntity.status(400).body(new ApiResponse("Something went wrong"));
         };
@@ -143,8 +146,7 @@ public class UserController {
 
     @GetMapping("get/MyFamily/{id}")
     public ResponseEntity<?> getMyFamily(@PathVariable String id) {
-        ArrayList<ArrayList<String>> getFamily = userService.showFamily(id);
-        if (getFamily.isEmpty()) {
+        ArrayList<String> getFamily = userService.showFamily(id);        if (getFamily.isEmpty()) {
             return ResponseEntity.status(400).body(new ApiResponse("You don't have a family yet. If you want to add a family member, send a request. To respond to a family request, visit: /api/v1/user/family/response/{receiver}/{sender}/{accept"));
         }
         return ResponseEntity.status(200).body(getFamily);
