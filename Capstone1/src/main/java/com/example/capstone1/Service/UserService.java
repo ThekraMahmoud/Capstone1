@@ -200,8 +200,7 @@ public class UserService {
         }
 
         if (!familyMembers.isEmpty()) {
-            return "true - Family members: " + familyMembers;
-        }
+            return "Purchase successful! Your family member(s) " + familyMembers + " have already purchased this product from the same merchant.";        }
 
         return "true";
     }
