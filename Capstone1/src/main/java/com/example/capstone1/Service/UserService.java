@@ -108,6 +108,9 @@ public class UserService {
                 currentUser = user;
                 balance = currentUser.getBalance();
                 userID1 = true;
+                if (currentUser.getRole().equalsIgnoreCase("Admin")) {
+                    return "Admin cannot purchase products";
+                }
                 break;
             }
         }
@@ -221,8 +224,10 @@ public class UserService {
         String userID = null;
         for (User user : users) {
             if (user.getId().equals(userId)) {
+                if (user.getRole().equalsIgnoreCase("Admin")) {
+                    return "Admin cannot purchase Prime";
+                }
                 userID = user.getId();
-
                 if (user.getBalance() >= 100) {
                     user.setBalance(user.getBalance() - 100);
                     prime.add(user);
@@ -251,16 +256,27 @@ ArrayList<ArrayList<String>> familyRequests = new ArrayList<>();
             String senderId =null;
             String requestId =null;
 
-        for(User userID:users){
-            if(userID.getId().equals(sender)){
-                senderId =userID.getId();
-                userOneFound=true;
+            for(User userID:users){
+                if(userID.getId().equals(sender)){
+                    if(userID.getRole().equalsIgnoreCase("Admin")){
+                        return "Admin cannot use Family System";
+                    }
+
+                    senderId =userID.getId();
+                    userOneFound=true;
+                }
+                if(userID.getId().equals(receiver)){
+
+                    if(userID.getRole().equalsIgnoreCase("Admin")){
+                        return "You cannot send a family request to an Admin";
+                    }
+
+                    requestId=userID.getId();
+                    userTwoFound=true;
+                }
             }
-            if(userID.getId().equals(receiver)){
-                requestId=userID.getId();
-                userTwoFound=true;
-            }
-        }
+
+
         if(!userOneFound){
          return "user one not found";
         }
@@ -325,18 +341,37 @@ ArrayList<ArrayList<String>> familyRequests = new ArrayList<>();
 
 
 
-     public ArrayList<ArrayList<String>> showFamily(String id){
-               ArrayList<ArrayList<String>>showFamily=new ArrayList<>();
+    public ArrayList<String> showFamily(String id) {
 
-            for(ArrayList<String> serch:familyRequests){
-                if(serch.get(0).equals(id)||serch.get(1).equals(id)){
-                    if(serch.get(2).equals("ACCEPTED")) {
-                        showFamily.add(serch);
+        ArrayList<String> showFamily = new ArrayList<>();
+
+        for (ArrayList<String> search : familyRequests) {
+
+            if (search.get(2).equals("ACCEPTED")) {
+
+                String familyMemberId = null;
+
+                if (search.get(0).equals(id)) {
+                    familyMemberId = search.get(1);
+                }
+                else if (search.get(1).equals(id)) {
+                    familyMemberId = search.get(0);
+                }
+
+                if (familyMemberId != null) {
+
+                    for (User user : users) {
+                        if (user.getId().equals(familyMemberId)) {
+                            showFamily.add(user.getUserName());
+                            break;
+                        }
                     }
                 }
             }
-            return showFamily;
-     }
+        }
+
+        return showFamily;
+    }
 
 
 //
@@ -384,8 +419,13 @@ ArrayList<ArrayList<String>> familyRequests = new ArrayList<>();
                             && getAllOrders.get(i).getProductid().equals(productId)
                             && getAllOrders.get(i).getMerchantId().equals(merchantId)) {
 
-                        familyMembers.add(familyMember);
-                        break;
+
+                        for (User user : users) {
+                            if (user.getId().equals(familyMember)) {
+                                familyMembers.add(user.getUserName());
+                                break;
+                            }
+                        }
                     }
                 }
             }
