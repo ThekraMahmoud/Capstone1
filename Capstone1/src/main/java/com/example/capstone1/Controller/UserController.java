@@ -97,11 +97,11 @@ public class UserController {
 
 
     @PostMapping("/prime/{userId}")
-    public ResponseEntity<?> prime(@PathVariable String userId){
+    public ResponseEntity<?> prime(@PathVariable String userId) {
 
         String check = userService.userPrime(userId);
 
-        return switch (check){
+        return switch (check) {
 
             case "true" -> ResponseEntity.status(200).body(new ApiResponse("Prime subscription successfully"));
 
@@ -109,10 +109,13 @@ public class UserController {
 
             case "not have money" -> ResponseEntity.status(400).body(new ApiResponse("Not enough money"));
 
+            case "already prime" -> ResponseEntity.status(400).body(new ApiResponse("User is already a Prime member"));
+
+            case "Admin cannot purchase Prime" -> ResponseEntity.status(400).body(new ApiResponse("Admin cannot purchase Prime"));
+
             default -> ResponseEntity.status(400).body(new ApiResponse("Something went wrong"));
         };
     }
-
 
     @GetMapping("/get/user/prodect/{id}")
     public ResponseEntity<?> getProductPuy(@PathVariable String id) {
