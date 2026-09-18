@@ -142,39 +142,19 @@ public class MerchantStockService {
 
 
 
-   public String  addStock(String merchantStockID, String productID, int amount) {
-
-       String merchantID1=null;
-       String productID1=null;
+   public boolean  addStock(String merchantStockID, String productID, int amount) {
 
         for(MerchantStock m:stocks) {
             if (m.getId().equals(merchantStockID)) {
 
-                if (m.getMerchantId().equals(merchantStockID)) {
-                    merchantID1 = m.getMerchantId();
-                }
-                if (!m.getProductid().equals(productID)) {
-                    productID1 = m.getProductid();
-
-                }
-            }
-
-            if (productID1 == null) {
-                return "productID errors";
-            }
-            if (merchantID1 == null) {
-                return "merchantID errors";
-            }
-
-
-            for (MerchantStock m1 : stocks) {
-                if (m1.getProductid().equals(productID) && m1.getMerchantId().equals(merchantStockID)) {
-                    m1.setStock(m1.getStock() + amount);
-                    return "true";
+                if (m.getProductid().equals(productID)) {
+                    m.setStock(m.getStock() + amount);
+                    return true;
                 }
             }
         }
-       return "Merchant Stock ID not found. Please check the ID and try again.";
+
+       return false;
     }
 }
 
