@@ -100,9 +100,6 @@ public class UserService {
 
 
 
-
-
-
         for (User user : users) {
             if (user.getId().equals(userID)) {
                 currentUser = user;
@@ -192,6 +189,7 @@ public class UserService {
 
                 getAllOrders.add(order);
                 userIdForPuy.add(userID);
+                break;
             }
         }
 
@@ -220,25 +218,29 @@ public class UserService {
 
 
     public String userPrime(String userId) {
-        String userID = null;
         for (User user : users) {
             if (user.getId().equals(userId)) {
                 if (user.getRole().equalsIgnoreCase("Admin")) {
                     return "Admin cannot purchase Prime";
                 }
-                userID = user.getId();
                 if (user.getBalance() >= 100) {
+                    for (int i=0;i<prime.size();i++) {
+                    if (prime.get(i).getId().equals(userId)) {
+                        return "already prime";
+                    }
+                }
+
                     user.setBalance(user.getBalance() - 100);
                     prime.add(user);
                     return "true";
                 }
+                return "not have money";
             }
         }
-        if(userID==null){
             return "id not found";
         }
-        return "not have money";
-        }
+
+
 
 
 
