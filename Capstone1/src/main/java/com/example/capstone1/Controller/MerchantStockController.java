@@ -81,15 +81,12 @@ public class MerchantStockController {
 
     @PostMapping("/addStock/{merchantID}/{productID}/{stock}")
     public ResponseEntity<?>addStock(@PathVariable String merchantID,@PathVariable String productID,@PathVariable int stock){
-     String check=merchantStockService.addStock(merchantID,productID,stock);
-        return switch (check){
-          case "productID errors"->ResponseEntity.status(400).body((new ApiResponse("productID Not found")));
-          case "merchantID errors"->ResponseEntity.status(400).body((new ApiResponse("merchantID Not found ")));
-          case "true"->ResponseEntity.status(200).body("Add Successfully");
-          case "Merchant Stock ID not found. Please check the ID and try again."->ResponseEntity.status(400).body(new ApiResponse("Merchant Stock ID not found. Please check the ID and try again."));
 
-          default ->ResponseEntity.status(400).body(new ApiResponse("somethings errors"));
-      };
+        if(merchantStockService.addStock(merchantID,productID,stock)){
+            return ResponseEntity.status(200).body(new ApiResponse("add stock successfully"));
+        }
+        return ResponseEntity.status(400).body(new ApiResponse("somethings errors"));
+
     }
 
 
